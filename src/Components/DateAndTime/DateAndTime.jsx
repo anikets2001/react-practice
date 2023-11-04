@@ -1,28 +1,27 @@
 import { useState, useEffect } from "react";
 import "./style.css";
 
+const getCurrentDateTime = () => {
+  const now = new Date();
+  const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+  const hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  const meridiem = hours >= 12 ? "PM" : "AM";
+  const twelveHourFormat = hours % 12 || 12;
+
+  const time = `${twelveHourFormat}:${minutes}:${seconds} ${meridiem}`;
+  return { date, time };
+};
+
 const DateAndTime = () => {
   const [currentTime, setCurrentTime] = useState(getCurrentDateTime());
-
-  function getCurrentDateTime() {
-    const now = new Date();
-    const date = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-    const hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    const seconds = now.getSeconds().toString().padStart(2, "0");
-    const meridiem = hours >= 12 ? "PM" : "AM";
-    const twelveHourFormat = hours % 12 || 12;
-
-    const time = `${twelveHourFormat}:${minutes}:${seconds} ${meridiem}`;
-    return { date, time };
-  }
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(getCurrentDateTime());
-    }, 1000); // Update every second
+    }, 1000);
 
-    // Clean up the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []);
 
